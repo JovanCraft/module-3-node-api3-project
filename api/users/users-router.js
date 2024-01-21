@@ -26,7 +26,7 @@ router.get('/', (req, res, next) => {
 router.get('/:id', validateUserId, (req, res) => {
   // RETURN THE USER OBJECT
   // this needs a middleware to verify user id
-  console.log(req.user)
+  res.json(req.user)
 });
 
 router.post('/', validateUser, (req, res) => {
@@ -63,5 +63,11 @@ router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   console.log(req.text)
 });
 
+router.use((err, req, res, next) => {//eslint-disable-line
+  res.status(err.status || 500).json({
+    customMessage: 'Something happened inside of posts router!',
+    message: err.message
+  })
+})
 // do not forget to export the router
 module.exports = router;
